@@ -154,6 +154,22 @@ public abstract class IndirectClient<C extends Credentials> extends BaseClient<C
     public String computeFinalCallbackUrl(final WebContext context) {
         return callbackUrlResolver.compute(this.urlResolver, this.callbackUrl, this.getName(), context);
     }
+    
+    public String computeFinalCallbackUrl(final WebContext context, String clientName) {
+        return computeFinalCallbackUrlNoClientName(context, clientName);
+    }
+    
+    public String computeFinalCallbackUrlNoClientName(final WebContext context, String clientName) {
+        String computedCallbackUrl = callbackUrlResolver.compute(this.urlResolver, this.callbackUrl, "", context);
+        if(computedCallbackUrl.endsWith("/")){
+        	computedCallbackUrl = computedCallbackUrl.substring(0, computedCallbackUrl.length()-1);
+        }
+        else{ 
+        	//computedCallbackUrl ends with '?client_name=' which is generic for Open Id Connect Client Name
+        	computedCallbackUrl = computedCallbackUrl.substring(0, computedCallbackUrl.length()-13);
+        }
+        return computedCallbackUrl;
+    }
 
     public void setCallbackUrl(final String callbackUrl) {
         this.callbackUrl = callbackUrl;
