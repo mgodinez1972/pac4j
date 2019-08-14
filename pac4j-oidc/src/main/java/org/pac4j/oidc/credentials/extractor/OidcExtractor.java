@@ -43,7 +43,7 @@ public class OidcExtractor implements CredentialsExtractor<OidcCredentials> {
 
     @Override
     public Optional<OidcCredentials> extract(final WebContext context) {
-        final String computedCallbackUrl = client.computeFinalCallbackUrl(context);
+        final String computedCallbackUrl = client.computeFinalCallbackUrl(context,"");
         final Map<String, List<String>> parameters = retrieveParameters(context);
         AuthenticationResponse response;
         try {
