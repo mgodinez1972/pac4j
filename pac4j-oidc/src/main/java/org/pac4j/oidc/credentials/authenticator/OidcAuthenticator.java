@@ -155,7 +155,7 @@ public class OidcAuthenticator implements Authenticator<OidcCredentials> {
         // if we have a code
         if (code != null) {
             try {
-                final String computedCallbackUrl = client.computeFinalCallbackUrl(context);
+                final String computedCallbackUrl = client.computeFinalCallbackUrl(context,"");
                 // Token request
                 final TokenRequest request = new TokenRequest(configuration.findProviderMetadata().getTokenEndpointURI(),
                         this.clientAuthentication, new AuthorizationCodeGrant(code, new URI(computedCallbackUrl)));
