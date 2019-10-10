@@ -5,7 +5,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.pac4j.core.context.WebContext;
@@ -151,11 +153,11 @@ public class OidcAuthenticator implements Authenticator<OidcCredentials> {
 
     @Override
     public void validate(final OidcCredentials credentials, final WebContext context) {
-        final AuthorizationCode code = credentials.getCode();
+        final AuthorizationCode code = credentials.getCode();        
         // if we have a code
         if (code != null) {
             try {
-                final String computedCallbackUrl = client.computeFinalCallbackUrl(context,"");
+                final String computedCallbackUrl = client.computeFinalCallbackUrl(context,"");    
                 // Token request
                 final TokenRequest request = new TokenRequest(configuration.findProviderMetadata().getTokenEndpointURI(),
                         this.clientAuthentication, new AuthorizationCodeGrant(code, new URI(computedCallbackUrl)));
@@ -164,9 +166,8 @@ public class OidcAuthenticator implements Authenticator<OidcCredentials> {
                 tokenHttpRequest.setReadTimeout(configuration.getReadTimeout());
 
                 final HTTPResponse httpResponse = tokenHttpRequest.send();
-                logger.debug("Token response: status={}, content={}", httpResponse.getStatusCode(),
-                        httpResponse.getContent());
-
+                logger.debug("Token response: status={}, content={}", httpResponse.getStatusCode(), httpResponse.getContent());
+                
                 final TokenResponse response = OIDCTokenResponseParser.parse(httpResponse);
                 if (response instanceof TokenErrorResponse) {
                     throw new TechnicalException("Bad token response, error=" + ((TokenErrorResponse) response).getErrorObject());
